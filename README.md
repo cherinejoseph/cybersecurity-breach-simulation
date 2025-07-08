@@ -22,7 +22,7 @@ The cybersecurity team was tasked with investigating potential unauthorized acce
 
 > **Note:** All materials are provided by Forage for educational purposes only. No sensitive or proprietary data is included.
 
-## 🛠️ Tools Used
+## 🛠️ Resources Used
 
 - Manual log analysis in Visual Studio Code  
 - Timestamp analysis and request pattern recognition  
