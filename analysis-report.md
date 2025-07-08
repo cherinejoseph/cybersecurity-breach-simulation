@@ -14,6 +14,7 @@ In the real world, this limits the attack surface and means that any breach woul
 
 > *“The dashboard lives in Daikibo's intranet. The only remote access to it would be through VPN tunnelling.”* — Forage Virtual Experience
 
+---
 
 ## Dashboard Accessibility Overview
 
@@ -33,6 +34,32 @@ Understanding whether the manufacturing status dashboard can be accessed directl
 - Security vulnerabilities allow attackers to bypass access controls.
 
 In our investigation, the dashboard lives solely on the internal network, accessible only via VPN, so direct internet access by attackers is not possible.
+
+---
+
+## Hints and Methodology
+
+During the investigation, the following hints and guidelines were essential for analyzing the `web_requests.log` file and identifying suspicious activity:
+
+- **Log File Structure:**  
+  - The log is divided into blocks separated by empty lines.  
+  - Each block represents activity from a unique internal IP address (no duplicates).  
+  - Each block starts with the IP address followed by a time-sorted table of requests to Daikibo’s telemetry dashboard.  
+  - IP addresses are static and belong to Daikibo’s internal network.  
+  - One block may represent multiple browsing sessions; sessions on different dates require new logins.  
+  - There is no continuous polling or data pushing; users must refresh the page to get updates.
+
+- **Analyzing Requests:**  
+  - Look for longer sequences of requests per user to identify behavior patterns.  
+  - Observe the typical request flow:  
+    **Login → dashboard page resources (styles, scripts, images) → API requests for machine statuses.**  
+  - Identify automated activity by spotting API requests occurring at exact intervals (e.g., once per hour), which the dashboard does not support natively.
+
+- **Tools and Tips:**  
+  - For easier inspection, open the log file in a code editor (like Sublime Text or Visual Studio Code).  
+  - Expand the editor window to full width and reduce the font size so that no text wraps onto a new line, making it easier to read.
+
+These guidelines helped pinpoint suspicious user behavior indicative of automated or unauthorized access.
 
 ---
 
@@ -81,3 +108,4 @@ Although these requests were successful, the timing and pattern strongly suggest
 
 > *“It starts off with a regular login → browsing of the dashboard. But then it turns into a regular, once-per-hour automated check of the statuses in all 4 factories with no page resources being loaded and with an obviously non-human punctuality.”*  
 > — Forage Virtual Experience Feedback
+
